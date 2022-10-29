@@ -19,10 +19,6 @@ jobs:
         run: composer validate --no-check-all --strict
         working-directory: ./
 
-      - name: Version
-        run: echo "::set-output name=version::${{ github.ref }}"
-        id: version
-
       - name: Update plugin version
         run: |
           # Replace the version with the tag in-place, this is NOT committed
@@ -38,9 +34,9 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
+          release_name: ${{ github.ref }}
           tag_name: ${{ github.ref_name }}
-          body_path: Release ${{ github.ref_name }}
+          body_path: readme.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
