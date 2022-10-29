@@ -1,0 +1,139 @@
+# Translation of Plugins - Factuursturen integration
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - Factuursturen integration\n"
+
+#: tests/test-pronamic-payments.php:112
+msgid "Payment for %s"
+msgstr ""
+
+#: config.php:122
+msgid "Mail intro"
+msgstr ""
+
+#: config.php:98
+msgid "Tax number field"
+msgstr ""
+
+#: config.php:105
+msgid "Show Woocommerce order number"
+msgstr ""
+
+#: config.php:129
+msgid "Convert Prices to EURO"
+msgstr ""
+
+#: config.php:122
+msgid "Default Invoice Language"
+msgstr ""
+
+#: config.php:115
+msgid "Default Tax Rate"
+msgstr ""
+
+#: config.php:74 config.php:91
+msgid "API Key"
+msgstr ""
+
+#: config.php:67 config.php:84
+msgid "Username"
+msgstr ""
+
+#: config.php:56
+msgid "Invoice Settings"
+msgstr ""
+
+#: config.php:50
+msgid "Factuursturen API Settings for Woocommerce"
+msgstr ""
+
+#: config.php:44
+msgid "Factuursturen API Settings for Pronamic"
+msgstr ""
+
+#: templates/admin/settings-help.php:7
+msgid "If you didn't create a key yet, click on the button \"Create API key\" (maak API sleutel) and fill the form"
+msgstr ""
+
+#: templates/admin/settings-help.php:6
+msgid "Click on the option \"Connections\" (verbindingen)"
+msgstr ""
+
+#: templates/admin/settings-help.php:5
+msgid "Go to your settings (left in the menu)"
+msgstr ""
+
+#: templates/admin/settings-help.php:4
+msgid "Log in to your factuursturen.nl account"
+msgstr ""
+
+#: templates/admin/settings-help.php:2
+msgid "To obtain API Key:"
+msgstr ""
+
+#: templates/admin/settings-help.php:1
+msgid "Factuursturen API Help"
+msgstr ""
+
+#: templates/admin/section-fsinvoice.php:1
+msgid "Some invoice data can't be determined automatically and some of them require needs to be specified here."
+msgstr ""
+
+#: src/View/Template.php:25
+msgid "View \"%1$s\" not found in path: %2$s!"
+msgstr ""
+
+#: src/Module.php:45 src/Module.php:53
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: src/Settings/Field/FSPriceToEuro.php:19
+msgid "Enable to automatically convert all invoice prices to EURO.<br>Prices are converted by factuursturen.nl service."
+msgstr ""
+
+#: src/Settings/Field/FSMailIntro.php:19
+msgid "Used as an intro text in emails. For example <code>Dear Mr(s),</code>."
+msgstr ""
+
+#: src/Controller/Admin/SettingsController.php:16
+msgid "Settings"
+msgstr ""
+
+#: src/Bootstrap.php:51
+msgid "Config file not found"
+msgstr ""
+
+#: src/Bootstrap.php:51
+msgid "Module \"%1$s\" could not be loaded: %2$s"
+msgstr ""
+
+#: src/ActionHook/AdminMenu.php:22
+msgid "Factuursturen API"
+msgstr ""
+
+#: src/ActionHook/AdminMenu.php:21
+msgid "Factuursturen - API Settings"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://flywebservices.nl/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Fly Webservices"
+msgstr ""
+
+#. Description of the plugin
+msgid "Sending invoices after payment through Factuursturen.nl service. Compatible with Woocommerce and Pronamic."
+msgstr ""
+
+#. Plugin Name of the plugin
+msgid "Factuursturen Integration"
+msgstr ""

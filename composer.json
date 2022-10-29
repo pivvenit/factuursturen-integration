@@ -1,0 +1,44 @@
+{
+  "name": "pivvenit/woocommerce-factuursturen",
+  "description": "Wordpress plugin for sending woocommerce invoices to factuursturen.nl service.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "PivvenIT",
+      "email": "info@pivvenit.nl"
+    },
+    {
+      "name": "Fly Webservices",
+      "email": "support@flywebservices.nl"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.5",
+    "eloquent/enumeration": "^5.1",
+    "analog/analog": "^1.0",
+    "typisttech/imposter-plugin": "^0.6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pivvenit\\FactuurSturen\\": "src/",
+      "Pivvenit\\FactuurSturen\\Module\\": "modules/"
+    }
+  },
+  "scripts": {
+    "build-production": "composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader",
+    "build-archive": "composer run build-production && cd .. && zip -r factuursturen-integration.zip ./factuursturen-integration -x *.git* -x *.log -x *.DS_Store"
+  },
+  "config": {
+    "allow-plugins": {
+      "typisttech/imposter-plugin": true
+    }
+  },
+  "extra": {
+    "imposter": {
+      "namespace": "Pivvenit\\FactuurSturen\\Vendor",
+      "excludes": []
+    }
+  }
+
+}
