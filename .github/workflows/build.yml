@@ -19,16 +19,15 @@ jobs:
         run: composer validate --no-check-all --strict
         working-directory: ./
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --no-check-all --strict
-        working-directory: ./
-
       - name: Update plugin version
         run: |
           # Replace the version with the tag in-place, this is NOT committed
           tag=${{ github.ref_name  }}
           sed -i "s/dev-master/$tag/g" ./woocommerce-factuursturen.php
 
+      - name: Composer build-production
+        run: composer run build-production
+        
       - name: Composer dump-autoload
         run: composer dump-autoload
 
