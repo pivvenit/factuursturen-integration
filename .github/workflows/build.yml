@@ -1,0 +1,51 @@
+name: Build release
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --no-check-all --strict
+        working-directory: ./
+
+      - name: Update plugin version
+        run: |
+          # Replace the version with the tag in-place, this is NOT committed
+          tag=${{ github.ref_name  }}
+          sed -i "s/dev-master/$tag/g" ./woocommerce-factuursturen.php
+
+      - name: Create artifact zip
+        run: composer run build-archive
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          body_path: README.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./factuursturen-integration.zip
+          asset_name: woocommerce-factuursturen.zip
+          asset_content_type: application/zip
