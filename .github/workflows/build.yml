@@ -19,6 +19,10 @@ jobs:
         run: composer validate --no-check-all --strict
         working-directory: ./
 
+      - name: Version
+        run: echo "::set-output name=version::${{ github.ref }}"
+        id: version
+
       - name: Update plugin version
         run: |
           # Replace the version with the tag in-place, this is NOT committed
@@ -28,19 +32,19 @@ jobs:
       - name: Create artifact zip
         run: composer run build-archive
 
-      - name: release
+      - name: Create release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: ${{ github.ref }}
+          release_name: ${{ steps.version.outputs.version }}
           tag_name: ${{ github.ref_name }}
           body_path: Release ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: upload windows artifact
+      - name: Upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
