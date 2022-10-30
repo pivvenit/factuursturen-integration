@@ -212,6 +212,8 @@ class InvoiceLine implements InvoiceLineInterface
             'dicount_pct' => $this->getDiscountPct(),
         );
 
-        return $filter_nulls ? array_filter($array) : null;
+        return $filter_nulls ? array_filter(function ($item) {
+			return !is_null($item);
+		}, $array) : null;
     }
 }
