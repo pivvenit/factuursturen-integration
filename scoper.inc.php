@@ -51,9 +51,9 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'exclude-files' => [
-        'templates/adminsection-fsinvoice.php',
-        'templates/settings.php',
-        'templates/settings-help.php',
+        './templates/admin/section-fsinvoice.php',
+        './templates/admin/settings.php',
+        './templates/admin/settings-help.php',
     ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
