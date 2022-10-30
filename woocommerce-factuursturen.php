@@ -15,6 +15,7 @@ if (!defined('ABSPATH')) {
     die('Access denied.');
 }
 
+require_once __DIR__."/updater.php";
 $updater = new PivvenitUpdater(__FILE__);
 $updater->set_username('pivvenit');
 $updater->set_repository('factuursturen-integration');
