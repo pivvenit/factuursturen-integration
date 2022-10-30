@@ -2,8 +2,8 @@
 
 namespace Pivvenit\FactuurSturen;
 
-use Pivvenit\FactuurSturen\Vendor\Analog\Analog as Logger;
-use Pivvenit\FactuurSturen\Vendor\Analog\Handler\File as LogHandler;
+use Analog\Analog as Logger;
+use Analog\Handler\File as LogHandler;
 
 class Bootstrap
 {

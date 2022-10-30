@@ -2,9 +2,10 @@
 
 namespace Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook;
 
-use Analog\Analog;
+
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\WoocommerceFactuursturen;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\FactuursturenHelperTrait;
+use Analog\Analog;
 
 /**
  * Implements `woocommerce_payment_complete` action hook.
