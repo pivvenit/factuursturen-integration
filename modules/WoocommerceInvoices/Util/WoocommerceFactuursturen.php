@@ -192,14 +192,20 @@ class WoocommerceFactuursturen
 
         // Add all items from order as separate invoice line items.
         foreach ($order->get_items() as $item) {
+			/* @var $item \WC_Order_Item */
             /* @var $item \WC_Order_Item_Product */
             $product = $item->get_product();
             $new_line = new InvoiceLine();
+			$priceData = $item->get_meta('rnb_price_breakdown', false);
+			$price = $product->is_on_sale('fsi') ? $product->get_sale_price('fsi') : $product->get_price('fsi');
+			if (!empty($priceData) && is_array($priceData) && array_key_exists('total', $priceData)) {
+				$price = (float)$priceData['total'];
+			}
             $new_line
                 ->setAmount($item->get_quantity('fsi'))
                 ->setDescription($item->get_name('fsi'))
                 ->setDiscountPct(0) // not sure where to get it from
-                ->setPrice($product->is_on_sale('fsi') ? $product->get_sale_price('fsi') : $product->get_price('fsi'))
+                ->setPrice($price)
                 ->setTaxRate($item->get_tax_status() == 'taxable' ? $tax_rate : 0)
             ;
 
