@@ -2,7 +2,7 @@
 
 namespace Pivvenit\FactuurSturen\Util;
 
-use Pivvenit\FactuurSturen\Vendor\GuzzleHttp\RequestOptions;
+use GuzzleHttp\RequestOptions;
 use Pivvenit\FactuurSturen\Util\Factuursturen;
 use Pivvenit\FactuurSturen\RequestData\Client;
 

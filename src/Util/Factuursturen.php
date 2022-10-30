@@ -3,9 +3,9 @@
 namespace Pivvenit\FactuurSturen\Util;
 
 use Analog\Analog as Logger;
-use Pivvenit\FactuurSturen\Vendor\GuzzleHttp\Client as GuzzleClient;
-use Pivvenit\FactuurSturen\Vendor\GuzzleHttp\RequestOptions;
-use Pivvenit\FactuurSturen\Vendor\GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Exception\ClientException;
 use Pivvenit\FactuurSturen\Util\Settings;
 use Pivvenit\FactuurSturen\Config;
 use Pivvenit\FactuurSturen\Util\Backtrace;

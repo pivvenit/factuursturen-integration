@@ -2,7 +2,7 @@
 
 namespace Pivvenit\FactuurSturen\RequestData;
 
-use Pivvenit\FactuurSturen\Vendor\Eloquent\Enumeration\AbstractEnumeration;
+use Eloquent\Enumeration\AbstractEnumeration;
 
 /**
  * Class ClientCollectTypeEnum.
