@@ -25,11 +25,14 @@ jobs:
           tag=${{ github.ref_name  }}
           sed -i "s/dev-master/$tag/g" ./woocommerce-factuursturen.php
 
-      - name: Composer build-production
-        run: composer run build-production
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --no-suggest
+        working-directory: ./
 
-      - name: Composer dump-autoload
-        run: composer dump-autoload
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
 
       - name: Create artifact zip
         run: composer run build-archive
