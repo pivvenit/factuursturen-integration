@@ -1,7 +1,7 @@
 <?php
 
 
-class PivvenitUpdater
+class PivvenitOpenSourceUpdater
 {
 
     private $file;
