@@ -196,7 +196,7 @@ class WoocommerceFactuursturen
             /* @var $item \WC_Order_Item_Product */
             $product = $item->get_product();
             $new_line = new InvoiceLine();
-			$priceData = $item->get_meta('rnb_price_breakdown', false);
+			$priceData = $item->get_meta('rnb_price_breakdown', true);
 			$price = $product->is_on_sale('fsi') ? $product->get_sale_price('fsi') : $product->get_price('fsi');
 			if (!empty($priceData) && is_array($priceData) && array_key_exists('total', $priceData)) {
 				$price = (float)$priceData['total'];
