@@ -19,8 +19,7 @@ return array(
     ),
     'modules' => array(
         // see
-        'WoocommerceInvoices',
-        'PronamicInvoices',
+        'WoocommerceInvoices'
     ),
     'actions' => array(
         'admin_init' => array(

@@ -5,7 +5,7 @@
  * Description:     Sending invoices after payment through Factuursturen.nl service. Compatible with Woocommerce. Forked from https://wordpress.org/plugins/factuursturen-integration/
  * Author:          PivvenIT
  * Author URI:      https://pivvenit.nl/
- * Text Domain:     factuursturen-integration
+ * Text Domain:     woocommerce-factuursturen
  * Domain Path:     /languages
  * Version:         dev-master
  *
@@ -25,7 +25,7 @@ if (!defined('FSI_TESTS_RUNNING')) {
     define('FSI_TESTS_RUNNING', false);
 }
 
-define('FSI_NAME', 'Factuursturen Integration');
+define('FSI_NAME', 'WooCommerce Factuursturen');
 define('FSI_VERSION', '1');
 define('FSI_REQUIRED_PHP_VERSION', '5.6');
 define('FSI_REQUIRED_WP_VERSION', '4.9');

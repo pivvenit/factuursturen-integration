@@ -1,22 +1,20 @@
 === Factuursturen integration ===
-Contributors: Fly Webservices
-Tags: factuursturen, woocommerce, pronamic, ideal, api
+Contributors: PivvenIT
+Tags: factuursturen, woocommerce
 Requires at least: 4.7
-Tested up to: 5.9
+Tested up to: 6.3
 Stable tag: 4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-This plugin passes all payments to Factuursturen and creates automatic invoices. Works with WooCommerce payments and Pronamic payments.
+This plugin passes all payments to Factuursturen and creates automatic invoices. Works with WooCommerce payments.
 
 = Supported Plugins =
 The following plugins are supported by the Factuursturen plugin:
 
 * WooCommerce
-* Gravity Forms
-* Pronamic Pay
 
 == Installation ==
 
