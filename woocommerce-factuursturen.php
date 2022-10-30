@@ -15,6 +15,11 @@ if (!defined('ABSPATH')) {
     die('Access denied.');
 }
 
+$updater = new PivvenitUpdater(__FILE__);
+$updater->set_username('pivvenit');
+$updater->set_repository('factuursturen-integration');
+$updater->initialize();
+
 if (!defined('FSI_TESTS_RUNNING')) {
     define('FSI_TESTS_RUNNING', false);
 }
