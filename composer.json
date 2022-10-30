@@ -26,8 +26,8 @@
     }
   },
   "scripts": {
-    "build-production": "composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader",
-    "build-archive": "composer run build-production && cd .. && zip -r factuursturen-integration.zip ./factuursturen-integration -x *.git* -x *.log -x *.DS_Store"
+    "build-production": "php php-scoper.phar add-prefix --force --no-interaction --output-dir=woocommerce-factuursturen && composer dump-autoload --working-dir woocommerce-factuursturen --classmap-authoritative",
+    "build-archive": "composer run build-production && zip -r woocommerce-factuursturen.zip ./woocommerce-factuursturen"
   },
   "config": {
     "allow-plugins": {

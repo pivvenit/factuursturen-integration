@@ -15,6 +15,9 @@ vendor
 /build
 /dist
 
+/woocommerce-factuursturen
+woocommerce-factuursturen.zip
+
 # misc
 .DS_Store
 .env.local
