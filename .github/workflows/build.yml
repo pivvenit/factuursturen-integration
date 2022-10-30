@@ -1,10 +1,10 @@
-name: Build release
+name: Build release 
 on:
   push:
     tags:
       - '*'
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
