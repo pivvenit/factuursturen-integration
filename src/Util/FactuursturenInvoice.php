@@ -3,7 +3,7 @@
 namespace Pivvenit\FactuurSturen\Util;
 
 use Analog\Analog;
-use GuzzleHttp\RequestOptions;
+use Pivvenit\FactuurSturen\Vendor\GuzzleHttp\RequestOptions;
 use Pivvenit\FactuurSturen\Util\Factuursturen;
 use Pivvenit\FactuurSturen\RequestData\Invoice;
 
