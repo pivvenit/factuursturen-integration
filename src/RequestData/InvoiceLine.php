@@ -124,7 +124,7 @@ class InvoiceLine implements InvoiceLineInterface
      */
     public function setTaxRate($tax_rate)
     {
-        $this->tax_rate = $tax_rate;
+        $this->tax_rate = max(0, $tax_rate);
         return $this;
     }
 

@@ -229,17 +229,25 @@ class WoocommerceFactuursturen
 
         // Add shipping as line item (there is no separate options for shipping for invoices).
         if ($order->get_shipping_total('fsi') > 0) {
-            $shipping_tax = -1;
-            $shipping_line = new InvoiceLine();
-            $shipping_line
-                ->setAmount(1)
-                ->setDiscountPct(0) // not sure where to get it from
-                ->setDescription($order->get_shipping_method('fsi'))
-                ->setPrice($order->get_shipping_total('fsi'))
-                ->setTaxRate($shipping_tax ? ($shipping_tax * 100) : 21)
-            ;
+			$shipping_methods = $order->get_shipping_methods();
+			foreach ($shipping_methods as $shipping_method) {
+				$shipping_line = new InvoiceLine();
+				$total = $shipping_method->get_total('fsi');
+				$total_tax = $shipping_method->get_total_tax('fsi');
+				$tax_rate = 0;
+				if ($total != 0) {
+					$tax_rate = round(($total_tax / $total) * 100);
+				}
 
-            $output[] = $shipping_line;
+				$shipping_line
+					->setAmount($shipping_method->get_quantity() ?? 1)
+					->setDiscountPct(0) // not sure where to get it from
+					->setDescription($shipping_method->get_name('fsi'))
+					->setPrice($total)
+					->setTaxRate($tax_rate);
+
+				$output[] = $shipping_line;
+			}
         }
 
 		$options = get_option('fsi_api_woocommerce');
