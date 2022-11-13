@@ -11,6 +11,9 @@
  *
  * @package         PivvenIT\FactuurSturen
  */
+
+use Pivvenit\FactuurSturen\Bootstrap;
+
 if (!defined('ABSPATH')) {
     die('Access denied.');
 }
@@ -68,7 +71,7 @@ function fsi_requirements_error()
  */
 if (fsi_requirements_met()) {
     require_once FSI_PLUGIN_PATH . 'vendor/autoload.php';
-    $bootstrap = new \Pivvenit\FactuurSturen\Bootstrap();
+    $bootstrap = new Bootstrap();
 } else {
     add_action('admin_notices', 'fsi_requirements_error');
 }
