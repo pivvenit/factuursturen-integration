@@ -38,8 +38,7 @@ class InvoiceDownloadController
 			return new WP_Error('invoice_notfound', esc_html__('Invoice not found.', 'feestenboel'), array('status' => 500));
 		}
 		return new \WP_REST_Response(base64_encode($invoice->getBody()->getContents()), 200, [
-			'Content-Type' => 'text/base64',
-			'Content-Disposition' => 'attachment; filename="factuur-' . $factuurSturenid . '.pdf"'
+			'Content-Type' => 'text/base64'
 		]);
 	}
 }
