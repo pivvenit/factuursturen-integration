@@ -148,7 +148,7 @@ class PivvenitOpenSourceUpdater
     public function download_package($args, $url)
     {
 
-        if (null !== $args['filename'] && strpos($url, $this->basename) !== false) {
+		if (null !== $args['filename'] && strpos($url, $this->repository) !== false) {
                 $args = array_merge($args, array("headers" => [
                     "Accept" => "application/octet-stream"]));
         }
