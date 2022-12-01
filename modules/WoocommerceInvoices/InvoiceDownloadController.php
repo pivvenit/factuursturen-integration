@@ -14,7 +14,7 @@ class InvoiceDownloadController
 			'methods' => 'GET',
 			'callback' => [__CLASS__, 'download_invoice'],
 			'permission_callback' => function () {
-				if (!current_user_can('edit_shop_orders')) {
+				if (!current_user_can('edit_others_shop_orders')) {
 					return new WP_Error('rest_forbidden', esc_html__('Viewing an order API.', 'fsi'), ['status' => 401]);
 				}
 				return true;
