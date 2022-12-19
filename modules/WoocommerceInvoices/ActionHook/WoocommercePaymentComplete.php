@@ -28,6 +28,7 @@ class WoocommercePaymentComplete
             // Converted FS data
             $fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
 			if ($fsInvoice == null) {
+				$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
 				Analog::error(sprintf('WC_Order with ID: %d could not be converted to FS_Invoice', $order_id));
 				return;
 			}
@@ -38,6 +39,7 @@ class WoocommercePaymentComplete
             $wcOrder->update_meta_data('_fsi_sent_date', time());
             $wcOrder->update_meta_data('_fsi_wc_id', $fsInvoice->getId());
             $wcOrder->save_meta_data();
+			$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %2$s (code: %1$d)', $fsInvoice->getId(), $response->getStatusCode()));
 
             Analog::notice(sprintf('Invoice sent, response status code: %1$d, invoice ID: %2$s', $fsInvoice->getId(), $response->getStatusCode()));
         } else {
