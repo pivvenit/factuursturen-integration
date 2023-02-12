@@ -1,5 +1,6 @@
 <?php
 
+use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommerceOnHoldBankTransferOrder;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommercePaymentComplete;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\InvoiceDownloadController;
 
@@ -11,6 +12,9 @@ return [
     'actions' => [
 		'woocommerce_payment_complete' => [
 			WoocommercePaymentComplete::class
+		],
+		'woocommerce_order_status_on-hold' => [
+			WoocommerceOnHoldBankTransferOrder::class
 		],
 		'rest_api_init' => [
 			InvoiceDownloadController::class
