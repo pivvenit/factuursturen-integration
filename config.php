@@ -130,6 +130,13 @@ return array(
                     'menu_slug' => 'fsi_settings_api',
                     'section' => 'fsi_invoice_general',
                 ),
+				array(
+					'id' => 'show-invoice-email',
+					'label' => __('Show Invoice email', 'factuursturen-integration'),
+					'callback' => '\\Pivvenit\FactuurSturen\\Settings\\Field\\FSInvoiceEmail',
+					'menu_slug' => 'fsi_settings_api',
+					'section' => 'fsi_invoice_general',
+				),
                 array(
                     'id' => 'mailintro',
                     'label' => __('Mail intro', 'factuursturen-integration'),

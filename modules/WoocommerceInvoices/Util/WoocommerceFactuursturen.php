@@ -78,6 +78,15 @@ class WoocommerceFactuursturen
 			$taxnumber = get_post_meta($order->get_id('fsi'), $options['tax-field'], true);
 		}
 
+		$invoiceOptions = get_option('fsi_invoice_general');
+		if ($invoiceOptions['show-invoice-email'] == 1) {
+			$email = get_post_meta($order->get_id('fsi'), '_invoice_email', true);
+		}
+		if (empty($email)) {
+			$email = $order->get_billing_email('fsi');
+		}
+
+
 		$client = new Client();
 		$client
 			->setActive(true)
@@ -88,7 +97,7 @@ class WoocommerceFactuursturen
 			->setCountry(ValueExtractor::getValueWithDefault($wc_countries, $order->get_billing_country('fsi'), ''))
 			->setCurrency($order->get_currency('fsi'))
 			->setDefaultDoclang(Settings::get_user_doclang($order->get_customer_id())) // empty to default language (In what language the invoice will be generated for this client.)
-			->setEmail($order->get_billing_email('fsi'))
+			->setEmail($email)
 			->setMailintro(Settings::get_option('mailintro', 'fsi_invoice', '')) // The first line used in the e-mail to address the recipient.
 			->setPhone($order->get_billing_phone('fsi'))
 			->setNotes($order->get_customer_note('fsi'))

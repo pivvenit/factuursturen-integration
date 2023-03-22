@@ -1,5 +1,6 @@
 <?php
 
+use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\FilterHook\AppendInvoiceEmailFilterHook;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommerceOnHoldBankTransferOrder;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommercePaymentComplete;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\InvoiceDownloadController;
@@ -21,8 +22,11 @@ return [
 		]
 	],
     'filters' => [
-    // 'filter_name' => array(
-    // '\\Pivvenit\FactuurSturen\\Module\\BasePopup\\Filter\\FilterName'
-    // ),
+		'woocommerce_checkout_fields' => [
+			AppendInvoiceEmailFilterHook::class
+		],
+		'woocommerce_admin_billing_fields' => [
+			AppendInvoiceEmailFilterHook::class . '::addInvoiceEmailFieldToBackendFields'
+		],
 	],
 ];
