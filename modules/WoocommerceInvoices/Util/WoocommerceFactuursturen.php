@@ -79,8 +79,8 @@ class WoocommerceFactuursturen
 		}
 
 		$invoiceOptions = get_option('fsi_invoice_general');
-		if ($invoiceOptions['show-invoice-email'] == 1) {
-			$email = get_post_meta($order->get_id('fsi'), '_invoice_email', true);
+		if (array_key_exists('show-invoice-email', $invoiceOptions) && $invoiceOptions['show-invoice-email'] == 1) {
+			$email = get_post_meta($order->get_id('fsi'), '_billing_invoice_email', true);
 		}
 		if (empty($email)) {
 			$email = $order->get_billing_email('fsi');
