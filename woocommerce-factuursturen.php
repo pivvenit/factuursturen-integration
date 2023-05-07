@@ -30,7 +30,7 @@ if (!defined('FSI_TESTS_RUNNING')) {
 
 define('FSI_NAME', 'WooCommerce Factuursturen');
 define('FSI_VERSION', '1');
-define('FSI_REQUIRED_PHP_VERSION', '5.6');
+define('FSI_REQUIRED_PHP_VERSION', '8.1');
 define('FSI_REQUIRED_WP_VERSION', '4.9');
 define('FSI_PLUGIN_FILE', __FILE__);
 define('FSI_PLUGIN_URL', plugin_dir_url(__FILE__));
