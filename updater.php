@@ -1,7 +1,7 @@
 <?php
 
 
-class PivvenitOpenSourceUpdater
+class WooCommerceFactuurSturenIntegrationUpdater
 {
 
     private $file;
@@ -17,6 +17,8 @@ class PivvenitOpenSourceUpdater
     private $repository;
 
     private $github_response;
+
+	private $use_prerelease;
 
     public function __construct($file)
     {
@@ -45,6 +47,14 @@ class PivvenitOpenSourceUpdater
         $this->repository = $repository;
     }
 
+	/**
+	 * @param mixed $use_prerelease
+	 */
+	public function setUsePrerelease($use_prerelease)
+	{
+		$this->use_prerelease = $use_prerelease;
+	}
+
     private function get_repository_info()
     {
         if (is_null($this->github_response)) { // Do we have a response?
@@ -54,7 +64,17 @@ class PivvenitOpenSourceUpdater
             $args['headers']['Accept'] = 'application/vnd.github+json';
             $response = json_decode(wp_remote_retrieve_body(wp_remote_get($request_uri, $args)), true); // Get JSON and parse it
             if (is_array($response)) { // If it is an array
-                $response = current($response); // Get the first item
+				if ($this->use_prerelease) {
+					// Simply use the first release
+					$response = current($response); // Get the first item
+				} else {
+					// Filter out the pre-releases
+					$response = array_filter($response, function ($release) {
+						return !$release['prerelease'];
+					});
+					// Get the latest release
+					$response = current($response);
+				}
             }
 
             $this->github_response = $response; // Set it to our property

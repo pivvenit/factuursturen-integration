@@ -19,9 +19,15 @@ if (!defined('ABSPATH')) {
 }
 
 require_once __DIR__."/updater.php";
-$updater = new PivvenitOpenSourceUpdater(__FILE__);
+$updater = new WooCommerceFactuurSturenIntegrationUpdater(__FILE__);
 $updater->set_username('pivvenit');
 $updater->set_repository('factuursturen-integration');
+$usePreRelease = false;
+$options = get_option('fsi_invoice_general');
+if (array_key_exists('use-prerelease', $options) && $options['use-prerelease'] == 1) {
+	$usePreRelease=true;
+}
+$updater->setUsePrerelease($usePreRelease);
 $updater->initialize();
 
 if (!defined('FSI_TESTS_RUNNING')) {
