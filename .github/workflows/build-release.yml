@@ -38,7 +38,7 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag: ${{ github.ref }}
+          tag: ${{ github.ref_name }}
           generateReleaseNotes: true
           artifacts: woocommerce-factuursturen.zip
           artifactContentType: application/zip
