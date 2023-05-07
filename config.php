@@ -144,6 +144,13 @@ return array(
                     'menu_slug' => 'fsi_settings_api',
                     'section' => 'fsi_invoice_general',
                 ),
+				array(
+					'id' => 'use-prerelease',
+					'label' => __('Use Prerelease', 'factuursturen-integration'),
+					'callback' => '\\Pivvenit\FactuurSturen\\Settings\\Field\\FSUsePrerelease',
+					'menu_slug' => 'fsi_settings_api',
+					'section' => 'fsi_invoice_general',
+				),
             ),
         ),
     ),
