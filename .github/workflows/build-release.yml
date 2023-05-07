@@ -13,7 +13,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
 
       - name: Validate composer.json and composer.lock
         run: composer validate --no-check-all --strict
@@ -28,11 +28,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --prefer-dist --no-interaction --no-progress --no-suggest
         working-directory: ./
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
 
       - name: Create artifact zip
         run: composer run build-archive
