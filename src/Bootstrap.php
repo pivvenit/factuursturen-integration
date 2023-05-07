@@ -12,28 +12,12 @@ class Bootstrap
 	 */
 	public function __construct()
 	{
-		$this->_init_logger();
 		$this->_install();
 		$this->_uninstall();
 		$this->_load_modules();
 		$this->_add_actions();
 		$this->_add_filters();
 		$this->_load_functions();
-	}
-
-	/**
-	 * Initialize logger
-	 */
-	public function _init_logger()
-	{
-		$config = Config::get_config();
-		Logger::handler(function ($msg) {
-			if (is_string($msg)) {
-				error_log($msg);
-			} else {
-				error_log(print_r($msg, true));
-			}
-		});
 	}
 
 	/**
