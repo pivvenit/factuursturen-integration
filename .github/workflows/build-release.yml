@@ -38,16 +38,18 @@ jobs:
         run: composer run build-archive
 
       - name: Create release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: ${{ github.ref }}
-          tag_name: ${{ github.ref_name }}
-          body_path: readme.txt
+          tag: ${{ github.ref }}
+          generateReleaseNotes: true
+          artifacts: woocommerce-factuursturen.zip
+          artifactContentType: application/zip
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Upload artifact
         uses: actions/upload-release-asset@v1
