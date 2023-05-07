@@ -1,0 +1,24 @@
+name: Execute Command Dispatch
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  executeSlashCommand:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+      - name: Slash Command Dispatch
+        uses: peter-evans/slash-command-dispatch@v3
+        id: scd
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-type: pull-request
+          dispatch-type: repository
+          permission: maintain
+          commands: |
+            build-prerelease
+          static-args: |
+            comment-id=${{ github.event.comment.id }}
+            pr-id=${{ github.event.issue.number }}
+            commit=${{ steps.comment-branch.outputs.head_sha }}

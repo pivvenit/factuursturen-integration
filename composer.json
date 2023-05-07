@@ -16,7 +16,10 @@
   "require": {
     "guzzlehttp/guzzle": "^7.5",
     "eloquent/enumeration": "^5.1",
-    "analog/analog": "^1.0"
+    "monolog/monolog": "^3.3"
+  },
+  "require-dev": {
+    "php-parallel-lint/php-parallel-lint": "^1.2.0"
   },
   "autoload": {
     "psr-4": {
@@ -25,19 +28,8 @@
     }
   },
   "scripts": {
+    "syntax-check": "parallel-lint --no-progress --exclude languages --exclude logs --exclude vendor .",
     "build-production": "php php-scoper.phar add-prefix --force --no-interaction --output-dir=woocommerce-factuursturen && composer dump-autoload --working-dir woocommerce-factuursturen --classmap-authoritative",
     "build-archive": "composer run build-production && zip -r woocommerce-factuursturen.zip ./woocommerce-factuursturen"
-  },
-  "config": {
-    "allow-plugins": {
-      "typisttech/imposter-plugin": true
-    }
-  },
-  "extra": {
-    "imposter": {
-      "namespace": "Pivvenit\\FactuurSturen\\Vendor",
-      "excludes": ["analog/analog"]
-    }
   }
-
 }

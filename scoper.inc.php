@@ -62,13 +62,13 @@ return [
     // heart contents.
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
-    'patchers' => [
-        static function (string $filePath, string $prefix, string $contents): string {
-            // Change the contents here.
-
-            return $contents;
-        },
-    ],
+	//    'patchers' => [
+	//        static function (string $filePath, string $prefix, string $contents): string {
+	//            // Change the contents here.
+	//
+	//            return $contents;
+	//        },
+	//    ],
 
     // List of symbols to consider internal i.e. to leave untouched.
     //

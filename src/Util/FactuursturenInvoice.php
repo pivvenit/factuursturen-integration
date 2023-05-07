@@ -2,7 +2,6 @@
 
 namespace Pivvenit\FactuurSturen\Util;
 
-use Analog\Analog;
 use GuzzleHttp\RequestOptions;
 use Pivvenit\FactuurSturen\Util\Factuursturen;
 use Pivvenit\FactuurSturen\RequestData\Invoice;
@@ -63,7 +62,7 @@ class FactuursturenInvoice extends Factuursturen
                     $this->getClientUtil()->fetchClient($data['invoice']['clientnr'], $client);
                     $data['invoice']['client'] = $client;
                 } catch(\Exception $e) {
-                    Analog::error(sprintf('Could not fetch client, error message: %s.', $e->getMessage()));
+					LogManager::getLogger()->error('Could not fetch client', ['exception' => $e]);
                 }
             }
 
