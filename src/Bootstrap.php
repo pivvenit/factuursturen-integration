@@ -2,8 +2,6 @@
 
 namespace Pivvenit\FactuurSturen;
 
-use Analog\Analog as Logger;
-use Analog\Handler\File as LogHandler;
 use InvalidArgumentException;
 
 class Bootstrap

@@ -2,7 +2,7 @@
 
 namespace Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util;
 
-use Analog\Analog;
+use Pivvenit\FactuurSturen\Util\LogManager;
 use WC_Customer;
 use WC_Order;
 use WC_Coupon;
@@ -160,18 +160,17 @@ class WoocommerceFactuursturen
 					$customer = new WC_Customer($order->get_user_id('fsi'));
 					$client = self::convertWcCustomerToClient($customer, $order);
 				} catch (\Exception $e) {
-					Analog::notice(sprintf('Could not retrieve customer with ID: "%s"!', $order->get_user_id('fsi')));
+					LogManager::getLogger()->error('Could not retrieve customer with ID {customer_id}', ['customer_id' => $order->get_user_id('fsi'), 'exception' => $e]);
 					$client = self::convertWcOrderToClient($order);
 				}
 			} else {
 				self::getClientUtil()->fetchClient($fs_client_id, $client);
 			}
 		} else {
-			Analog::notice(sprintf('Could not retrieve customer for order: "%s", using order data to create new client...!', $order->get_id()));
+			LogManager::getLogger()->info('Could not retrieve customer for order: {order_id}, using order data to create new client', ['order_id' => $order->get_id()]);
 			$client = self::convertWcOrderToClient($order);
 		}
 
-		Analog::notice(sprintf('Client prepared with data: "%s"!', json_encode($client)));
 
 		if (!isset($fs_client_id) || empty($fs_client_id)) {
 			// Create client in factuursturen service

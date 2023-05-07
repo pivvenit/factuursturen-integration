@@ -5,45 +5,62 @@ namespace Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook;
 
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\WoocommerceFactuursturen;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\FactuursturenHelperTrait;
-use Analog\Analog;
+use Pivvenit\FactuurSturen\Util\LogManager;
 
 /**
  * Implements `woocommerce_payment_complete` action hook.
  */
 class WoocommercePaymentComplete
 {
-    use FactuursturenHelperTrait;
+	use FactuursturenHelperTrait;
 
-    public static function execute($order_id)
-    {
+	public static function execute($order_id)
+	{
+		$logger = LogManager::getLogger();
 		if (!empty($_ENV['DISABLE_FACTUURSTUREN'])) {
 			return;
 		}
-        Analog::notice(sprintf('WC_Order with ID: %d marked as completed, starting sending the invoice process...', $order_id));
+		$logger->info('WC_Order with ID: {order_id} marked as completed, starting sending the invoice process.', ['order_id' => $order_id]);
 
-        // WC data
-        $wcOrder = wc_get_order($order_id);
+		// WC data
+		$wcOrder = wc_get_order($order_id);
 
-        if($wcOrder instanceof \WC_Order && '' == $wcOrder->get_meta('_fsi_wc_id', true, 'fsi')) {
-            // Converted FS data
-            $fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
-			if ($fsInvoice == null) {
-				$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
-				Analog::error(sprintf('WC_Order with ID: %d could not be converted to FS_Invoice', $order_id));
-				return;
-			}
-            Analog::notice(sprintf('Invoice prepared for order: %1$d, data: %2$s', $wcOrder->get_id(), json_encode($fsInvoice)));
+		if (!($wcOrder instanceof \WC_Order)) {
+			$logger->error('Woocommerce order with ID {order_id} does not exist, invoice not sent', ['order_id' => $order_id]);
+			return;
+		}
 
-            // Send invoice
-            $response = self::getInvoiceUtil()->createInvoice($fsInvoice);
-            $wcOrder->update_meta_data('_fsi_sent_date', time());
-            $wcOrder->update_meta_data('_fsi_wc_id', $fsInvoice->getId());
-            $wcOrder->save_meta_data();
-			$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %2$s (code: %1$d)', $fsInvoice->getId(), $response->getStatusCode()));
+		if ($wcOrder->get_meta('_fsi_wc_id', true, 'fsi') != '') {
+			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id]);
+			return;
+		}
 
-            Analog::notice(sprintf('Invoice sent, response status code: %1$d, invoice ID: %2$s', $fsInvoice->getId(), $response->getStatusCode()));
-        } else {
-            Analog::error(sprintf('Woocommerce order with ID %d does not exist, invoice not sent!', $order_id));
-        }
-    }
+		// Converted FS data
+		$fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
+		if ($fsInvoice == null) {
+			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
+			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id]);
+			return;
+		}
+		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id]);
+
+		// Send invoice
+		$response = self::getInvoiceUtil()->createInvoice($fsInvoice);
+		if ($response == null) {
+			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id]);
+			return;
+		}
+		if ($response->getStatusCode() != 201) {
+			$wcOrder->add_order_note(sprintf('Kon geen factuursturen factuur aanmaken. Status code: %d', $response->getStatusCode()));
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'body' => $response->getBody()->getContents()]);
+			return;
+		}
+		$wcOrder->update_meta_data('_fsi_sent_date', time());
+		$wcOrder->update_meta_data('_fsi_wc_id', $fsInvoice->getId());
+		$wcOrder->save_meta_data();
+		$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %2$s (code: %1$d)', $fsInvoice->getId(), $response->getStatusCode()));
+
+		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id]);
+	}
 }
