@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7a11de91af907c7949de17ab23c3ee8",
+    "content-hash": "328222fe6afd5f065b88ffd33ab17556",
     "packages": [
         {
             "name": "eloquent/enumeration",
@@ -876,7 +876,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=8.1"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"
 }
