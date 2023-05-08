@@ -16,7 +16,7 @@
   "require": {
     "php": ">=8.1",
     "guzzlehttp/guzzle": "^7.5",
-    "eloquent/enumeration": "^5.1",
+    "eloquent/enumeration": "^6.0",
     "monolog/monolog": "^3.3"
   },
   "require-dev": {
