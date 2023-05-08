@@ -4,29 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "328222fe6afd5f065b88ffd33ab17556",
+    "content-hash": "4856a52d91bb39221f816afd0f13707d",
     "packages": [
         {
             "name": "eloquent/enumeration",
-            "version": "5.1.1",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eloquent/enumeration.git",
-                "reference": "0242859435d9b135939816858348556d3cde9e3c"
+                "reference": "15a1959683ae4fea75e19ff09d72a344ece3c6a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/0242859435d9b135939816858348556d3cde9e3c",
-                "reference": "0242859435d9b135939816858348556d3cde9e3c",
+                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/15a1959683ae4fea75e19ff09d72a344ece3c6a4",
+                "reference": "15a1959683ae4fea75e19ff09d72a344ece3c6a4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "icecave/archer": "dev-develop",
-                "phpunit/phpunit": "^4",
-                "sami/sami": "^3"
+                "phpunit/phpunit": "^7"
             },
             "type": "library",
             "autoload": {
@@ -59,7 +57,7 @@
                 "issues": "https://github.com/eloquent/enumeration/issues",
                 "source": "https://github.com/eloquent/enumeration/tree/master"
             },
-            "time": "2015-11-03T22:21:38+00:00"
+            "time": "2018-11-22T02:45:56+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -880,5 +878,5 @@
         "php": ">=8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
