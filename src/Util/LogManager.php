@@ -29,6 +29,23 @@ class LogManager
 			foreach ($handlers as $handler) {
 				$logger->pushHandler($handler);
 			}
+
+			$processors = [];
+			// Let other plugins add additional processors
+			$processors = apply_filters('fsi_log_processors', $processors);
+			if (!is_array($processors)) {
+				throw new InvalidArgumentException('fsi_log_processors filter must return an array of Monolog\Processor\ProcessorInterface');
+			}
+
+			foreach ($processors as $processor) {
+				$logger->pushProcessor($processor);
+			}
+
+			// Allow other plugins to modify the logger
+			$logger = apply_filters('fsi_log_configure', $logger);
+			if (!($logger instanceof LoggerInterface)) {
+				throw new InvalidArgumentException('fsi_log_configure filter must return an instance of Psr\Log\LoggerInterface');
+			}
 			self::$logger = $logger;
 		}
 		return self::$logger;
