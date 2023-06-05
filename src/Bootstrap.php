@@ -81,13 +81,15 @@ class Bootstrap
 		foreach ($actions as $action_name => $action_classes) {
 			foreach ($action_classes as $action_class) {
 				$priority = 10;
-				$class = $action_class;
-
-				if (is_array($action_class) && $action_class['class']) {
-					$priority = isset($action_class['priority']) ? $action_class['priority'] : $priority;
-					$class = $action_class['class'] ? $action_class['class'] : $action_class;
+				if (\class_exists($action_class)) {
+					add_action($action_name, array(new $action_class(), 'execute'), $priority, 10);
+				} elseif (\function_exists($action_class)) {
+					add_action($action_name, $action_class, $priority, 10);
+				} elseif (\is_callable($action_class)) {
+					add_action($action_name, $action_class, $priority, 10);
+				} else {
+					throw new InvalidArgumentException("Unknown action class: {$action_class}");
 				}
-				add_action($action_name, array(new $class, 'execute'), $priority, 10);
 			}
 		}
 	}
