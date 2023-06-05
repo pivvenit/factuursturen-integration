@@ -119,7 +119,12 @@ class Factuursturen
 		}
 
 		if ($response != null) {
-			$logger->info('Request {method} {url} succeeded with status code: {status_code}, body: {body}, reason: {reason}', ['method' => $method, 'url' => $config['factuursturen_endpoint'] . $uri, 'options' => $options, 'status_code' => $response->getStatusCode(), 'body' => $response->getBody()->getContents(), 'reason' => $response->getReasonPhrase()]);
+			// If it is a json response log the body as well
+			if ($response->hasHeader('Content-Type') && strpos($response->getHeader('Content-Type')[0], 'application/json') !== false) {
+				$logger->info('Request {method} {url} succeeded with status code: {status_code}, body: {body}, reason: {reason}', ['method' => $method, 'url' => $config['factuursturen_endpoint'] . $uri, 'options' => $options, 'status_code' => $response->getStatusCode(), 'body' => $response->getBody()->getContents(), 'reason' => $response->getReasonPhrase()]);
+			} else {
+				$logger->info('Request {method} {url} succeeded with status code: {status_code}, reason: {reason}', ['method' => $method, 'url' => $config['factuursturen_endpoint'] . $uri, 'options' => $options, 'status_code' => $response->getStatusCode(), 'reason' => $response->getReasonPhrase()]);
+			}
 			$response->getBody()->rewind(); // reset body stream pointer
 		}
 
