@@ -4,6 +4,7 @@ namespace Pivvenit\FactuurSturen\Module\WoocommerceInvoices;
 
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommercePaymentComplete;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\FactuursturenHelperTrait;
+use Pivvenit\FactuurSturen\Util\LogManager;
 use WP_Error;
 use WP_REST_Request;
 
@@ -47,26 +48,33 @@ class InvoiceDownloadController
 		// wp_ajax_fsi_view_invoice
 		// Validate that the user has access
 		if (!current_user_can('edit_others_shop_orders')) {
+			LogManager::getLogger()->info('Invalid request, insufficient permissions.');
+
 			wp_die(esc_html__('You do not have permission to view this invoice.', 'fsi'));
 		}
 		// Check if order_id is set
 		if (!isset($_GET['order_id']) || !is_numeric($_GET['order_id'])) {
+			LogManager::getLogger()->info('Invalid request, missing order_id.');
 			wp_die(esc_html__('Invalid request', 'fsi'));
 		}
 		// Get the order
 		$order = wc_get_order($_GET['order_id']);
 		if (!$order) {
+			LogManager::getLogger()->info('Invalid request, order with id {order_id} is not found.', ['order_id' => $order->get_id()]);
+
 			wp_die(esc_html__('Order not found.', 'fsi'));
 		}
 		// Get the invoice id
 		$factuurSturenid = $order->get_meta('_fsi_wc_id', \true);
 		if (!$factuurSturenid) {
+			LogManager::getLogger()->info('Invalid request, invoice Id {invoice_id} does not exist for order {order_id}.', ['order_id' => $order->get_id(), 'invoice_id' => $factuurSturenid]);
 			wp_die(esc_html__('Invoice Id does not exist.', 'fsi'));
 		}
 		// Get the invoice
 		try {
 			$invoice = self::getInvoiceUtil()->makeRequest("GET", "invoices_pdf/{$factuurSturenid}");
 		} catch (\Exception $e) {
+			LogManager::getLogger()->error($e->getMessage());
 			wp_die(esc_html__('Invoice does not exist.', 'fsi'));
 		}
 		// Output the invoice
@@ -79,20 +87,24 @@ class InvoiceDownloadController
 
 	public static function create_invoice() {
 		if (!current_user_can('edit_others_shop_orders')) {
+			LogManager::getLogger()->info('Invalid request, unsufficient permissions.');
 			wp_die(esc_html__('You do not have permission to view this invoice.', 'fsi'));
 		}
 		// Check if order_id is set
 		if (!isset($_POST['order_id']) || !is_numeric($_POST['order_id'])) {
+			LogManager::getLogger()->info('Invalid request, order_id not found.');
 			wp_die(esc_html__('Invalid request', 'fsi'));
 		}
 		// Get the order
 		$order = wc_get_order($_POST['order_id']);
 		if (!$order) {
+			LogManager::getLogger()->info('Invalid request, order not found.');
 			wp_die(esc_html__('Order not found.', 'fsi'));
 		}
 		WoocommercePaymentComplete::execute($order->get_id());
 		if ($order->get_meta('_fsi_wc_id', \true, 'fsi') == '') {
 			// return an http 500 error
+			LogManager::getLogger()->info('Failed to create an invoice from the admin for order {order_id}.', ['order_id' => $order->get_id()]);
 			wp_die(esc_html__('Invoice could not be created.', 'fsi'));
 		}
 		die();
