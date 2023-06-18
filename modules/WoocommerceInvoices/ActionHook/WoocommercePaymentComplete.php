@@ -31,7 +31,7 @@ class WoocommercePaymentComplete
 		}
 
 		if ($wcOrder->get_meta('_fsi_wc_id', true, 'fsi') != '') {
-			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id]);
+			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
 
@@ -39,21 +39,21 @@ class WoocommercePaymentComplete
 		$fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
 		if ($fsInvoice == null) {
 			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
-			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id]);
+			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
-		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id]);
+		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 
 		// Send invoice
 		$response = self::getInvoiceUtil()->createInvoice($fsInvoice);
 		if ($response == null) {
 			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
-			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id]);
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
 		if ($response->getStatusCode() != 201) {
 			$wcOrder->add_order_note(sprintf('Kon geen factuursturen factuur aanmaken. Status code: %d', $response->getStatusCode()));
-			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'body' => $response->getBody()->getContents()]);
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'body' => $response->getBody()->getContents(), 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
 		$wcOrder->update_meta_data('_fsi_sent_date', time());
@@ -61,6 +61,6 @@ class WoocommercePaymentComplete
 		$wcOrder->save_meta_data();
 		$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %2$s (code: %1$d)', $fsInvoice->getId(), $response->getStatusCode()));
 
-		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id]);
+		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 	}
 }

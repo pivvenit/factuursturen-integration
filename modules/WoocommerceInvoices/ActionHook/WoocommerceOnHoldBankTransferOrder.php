@@ -31,12 +31,12 @@ class WoocommerceOnHoldBankTransferOrder
 		}
 
 		if ($wcOrder->get_payment_method() != 'bacs') {
-			$logger->info('Woocommerce order with ID {order_id} is not a bank transfer order, exiting', ['order_id' => $order_id]);
+			$logger->info('Woocommerce order with ID {order_id} is not a bank transfer order but {payment_method}, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
 
 		if ($wcOrder->get_meta('_fsi_wc_id', true, 'fsi') == '') {
-			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id]);
+			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
 
@@ -44,10 +44,10 @@ class WoocommerceOnHoldBankTransferOrder
 		$fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
 		if ($fsInvoice == null) {
 			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
-			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id]);
+			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 			return;
 		}
-		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id]);
+		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 
 		// Send invoice
 		$response = self::getInvoiceUtil()->createInvoice($fsInvoice);
@@ -56,6 +56,6 @@ class WoocommerceOnHoldBankTransferOrder
 		$wcOrder->save_meta_data();
 		$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %1$s (statusCode: %2$d)', $fsInvoice->getId(), $response->getStatusCode()));
 
-		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id]);
+		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
 	}
 }

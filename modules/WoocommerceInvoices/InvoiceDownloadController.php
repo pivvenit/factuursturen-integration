@@ -4,6 +4,7 @@ namespace Pivvenit\FactuurSturen\Module\WoocommerceInvoices;
 
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\ActionHook\WoocommercePaymentComplete;
 use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\FactuursturenHelperTrait;
+use Pivvenit\FactuurSturen\Module\WoocommerceInvoices\Util\WoocommerceFactuursturen;
 use Pivvenit\FactuurSturen\Util\LogManager;
 use WP_Error;
 use WP_REST_Request;
@@ -101,12 +102,52 @@ class InvoiceDownloadController
 			LogManager::getLogger()->info('Invalid request, order not found.');
 			wp_die(esc_html__('Order not found.', 'fsi'));
 		}
-		WoocommercePaymentComplete::execute($order->get_id());
-		if ($order->get_meta('_fsi_wc_id', \true, 'fsi') == '') {
-			// return an http 500 error
-			LogManager::getLogger()->info('Failed to create an invoice from the admin for order {order_id}.', ['order_id' => $order->get_id()]);
-			wp_die(esc_html__('Invoice could not be created.', 'fsi'));
+
+		$logger = LogManager::getLogger();
+		if (!empty($_ENV['DISABLE_FACTUURSTUREN'])) {
+			return;
 		}
+		// WC data
+		$wcOrder = wc_get_order($order_id);
+
+		if (!($wcOrder instanceof \WC_Order)) {
+			$logger->error('Woocommerce order with ID {order_id} does not exist, invoice not sent', ['order_id' => $order_id]);
+			return;
+		}
+
+		if ($wcOrder->get_meta('_fsi_wc_id', true, 'fsi') != '') {
+			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+			return;
+		}
+
+		// Converted FS data
+		$fsInvoice = WoocommerceFactuursturen::convertWcOrderToInvoice($wcOrder);
+		if ($fsInvoice == null) {
+			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
+			$logger->error('WC_Order with ID: {order_id} could not be converted to FS_Invoice, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+			return;
+		}
+		$logger->info('Factuursturen Invoice object created for order {order_id}', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+
+		// Send invoice
+		$response = self::getInvoiceUtil()->createInvoice($fsInvoice);
+		if ($response == null) {
+			$wcOrder->add_order_note('Kon geen factuursturen factuur aanmaken.');
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+			return;
+		}
+		if ($response->getStatusCode() != 201) {
+			$wcOrder->add_order_note(sprintf('Kon geen factuursturen factuur aanmaken. Status code: %d', $response->getStatusCode()));
+			$logger->error('WC_Order with ID: {order_id} could not be sent to Factuursturen, exiting', ['order_id' => $order_id, 'body' => $response->getBody()->getContents(), 'payment_method' => $wcOrder->get_payment_method()]);
+			return;
+		}
+		$wcOrder->update_meta_data('_fsi_sent_date', time());
+		$wcOrder->update_meta_data('_fsi_wc_id', $fsInvoice->getId());
+		$wcOrder->save_meta_data();
+		$wcOrder->add_order_note(sprintf('Factuursturen factuur aangemaakt %2$s (code: %1$d)', $fsInvoice->getId(), $response->getStatusCode()));
+
+		$logger->info('Invoice sent, response status code: {status_code}, invoice ID: {order_id}', ['status_code' => $response->getStatusCode(), 'order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+
 		die();
 	}
 
