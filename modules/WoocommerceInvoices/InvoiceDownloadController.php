@@ -97,8 +97,9 @@ class InvoiceDownloadController
 			wp_die(esc_html__('Invalid request', 'fsi'));
 		}
 		// Get the order
-		$order = wc_get_order($_POST['order_id']);
-		if (!$order) {
+		$wcOrder = wc_get_order($_POST['order_id']);
+		$order_id = $_POST['order_id'];
+		if (!$wcOrder) {
 			LogManager::getLogger()->info('Invalid request, order not found.');
 			wp_die(esc_html__('Order not found.', 'fsi'));
 		}
@@ -108,7 +109,6 @@ class InvoiceDownloadController
 			return;
 		}
 		// WC data
-		$wcOrder = wc_get_order($order_id);
 
 		if (!($wcOrder instanceof \WC_Order)) {
 			$logger->error('Woocommerce order with ID {order_id} does not exist, invoice not sent', ['order_id' => $order_id]);
