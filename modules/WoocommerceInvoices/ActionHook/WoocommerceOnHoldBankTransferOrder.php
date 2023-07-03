@@ -36,7 +36,7 @@ class WoocommerceOnHoldBankTransferOrder
 		}
 
 		if ($wcOrder->get_meta('_fsi_wc_id', true, 'fsi') == '') {
-			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method()]);
+			$logger->info('Woocommerce order with ID {order_id} has already been sent to Factuursturen', ['order_id' => $order_id, 'payment_method' => $wcOrder->get_payment_method(), 'existing_fsi_id' => $wcOrder->get_meta('_fsi_wc_id', true, 'fsi')]);
 			return;
 		}
 
