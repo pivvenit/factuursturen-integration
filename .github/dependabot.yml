@@ -9,3 +9,5 @@ updates:
     open-pull-requests-limit: 10
     assignees:
       - Qrious
+    cooldown:
+      default-days: 1
